@@ -1,10 +1,13 @@
 <?php
 
+$configLocalPath = __DIR__ . '/web-local.php';
+$configLocal = file_exists($configLocalPath) ? include $configLocalPath : array();
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
+    'id' => 'test-case-greenice',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -72,4 +75,4 @@ if (YII_ENV_DEV) {
     ];
 }
 
-return $config;
+return !empty($configLocal) ? array_merge($config, $configLocal) : $config;
