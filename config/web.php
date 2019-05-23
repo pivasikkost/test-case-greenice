@@ -55,6 +55,7 @@ $config = [
         ],
         */
     ],
+    'defaultRoute' => 'site/areas',
     'params' => $params,
 ];
 
