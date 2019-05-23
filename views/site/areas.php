@@ -8,7 +8,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Areas';
+$this->title = 'View Areas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-areas">

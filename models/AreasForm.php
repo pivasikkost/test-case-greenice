@@ -18,9 +18,7 @@ class AreasForm extends Model
     public function rules()
     {
         return [
-            // address is required
-            ['address', 'required'],
-            // email has to be a valid email address
+            // address has to be a valid
             ['address', 'string'],
         ];
     }
