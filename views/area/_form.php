@@ -37,4 +37,4 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlmf6a0-d66_PiyhgIYz5pOE0PjvO2c2o"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= Yii::$app->params['google_maps_js_api_key'] ?>"></script>
