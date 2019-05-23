@@ -14,18 +14,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-    <section class="form-section">
-        <div class="form-row">
-            <div class="form-col form-col-full">
-                <div class="form-group">
-                    <label><?php Yii::t('app', 'Area location on the map (add correct address)'); ?></label>
-                    <div id="map-block">
-                        <div id="map-area" class="h-100" style="min-height: 400px;"></div>
-                    </div>
-                </div>
-            </div>
+    <div class="form-group">
+        <label>
+            <?= Yii::t(
+                    'app',
+                    'Area location on the map (you can specify the coordinates by dragging the marker.)'
+            ); ?>
+        </label>
+        <div id="map-block">
+            <div id="map-area" class="h-100" style="min-height: 400px;"></div>
         </div>
-    </section>
+    </div>
 
     <?= $form->field($model, 'lat')->textInput() ?>
 
