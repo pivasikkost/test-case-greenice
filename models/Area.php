@@ -2,20 +2,57 @@
 
 namespace app\models;
 
-use \yii\base\BaseObject;
+use Yii;
+use \yii\db\ActiveRecord;
 use \yii\helpers\ArrayHelper;
 
-class Area extends BaseObject
+/**
+ * This is the model class for table "places".
+ *
+ * @property int $id
+ * @property string $address
+ * @property double $lat
+ * @property double $lng
+ */
+class Area extends ActiveRecord
 {
     const VIEW_WITH_COORDS = 0;
     const VIEW_WITH_DISTANCE = 1;
 
-    public $id;
-    public $address;
-    public $lat;
-    public $lng;
     public $distance;
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'places';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['address', 'lat', 'lng'], 'required'],
+            [['lat', 'lng'], 'number'],
+            [['address'], 'string', 'max' => 255],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'address' => Yii::t('app', 'Address'),
+            'lat' => Yii::t('app', 'Lat'),
+            'lng' => Yii::t('app', 'Lng'),
+        ];
+    }
 
     /**
      * Returns a list of areas
@@ -25,13 +62,12 @@ class Area extends BaseObject
      */
     public static function getList($area = null)
     {
-        $areas = include __DIR__ . '/areas.php';
+        $areas = static::find()->orderBy('address')->indexBy('address')->all();
 
         if (isset($areas[$area])) {
             $areas = static::sortByDistance($areas, $area);
             $areas = static::prepareForView($areas, static::VIEW_WITH_DISTANCE);
         } else {
-            $areas = static::sortAlphabetically($areas, $area);
             $areas = static::prepareForView($areas, static::VIEW_WITH_COORDS);
         }
 
@@ -55,22 +91,6 @@ class Area extends BaseObject
     }
 
     /**
-     * Sorts areas alphabetically
-     *
-     * @param array $areas
-     * @param string $area
-     * @return array
-     */
-    public static function sortAlphabetically($areas, $area)
-    {
-        foreach ($areas as $key => $value) {
-            $areas[$key]['address'] = $key;
-        }
-        ArrayHelper::multisort($areas, 'address', SORT_ASC, SORT_STRING);
-        return $areas;
-    }
-
-    /**
      * Returns the distance between coordinates, in kilometers
      *
      * This uses the ‘haversine’ formula to calculate the great-circle distance between two points – that is,
@@ -86,14 +106,14 @@ class Area extends BaseObject
      */
     public static function getDistance($coord1, $coord2)
     {
-        if (($coord1['lat'] == $coord2['lat']) && ($coord1['long'] == $coord2['long'])) {
+        if (($coord1['lat'] == $coord2['lat']) && ($coord1['lng'] == $coord2['lng'])) {
             return 0;
         }
 
         $lat1 = deg2rad($coord1['lat']); // deg * (Math.PI/180)
-        $lon1 = deg2rad($coord1['long']);
+        $lon1 = deg2rad($coord1['lng']);
         $lat2 = deg2rad($coord2['lat']);
-        $lon2 = deg2rad($coord2['long']);
+        $lon2 = deg2rad($coord2['lng']);
 
         $r = 6372.797; // Radius of the earth in km
         $dlat = $lat2 - $lat1;
@@ -116,11 +136,11 @@ class Area extends BaseObject
     {
         if ($format === static::VIEW_WITH_COORDS) {
             foreach ($areas as $key => $value) {
-                $areas[$key] = $key . ' ' . $value['lat'] . ' ' . $value['long'];
+                $areas[$key] = $value['address'] . ' ' . $value['lat'] . ' ' . $value['lng'];
             }
         } elseif ($format === static::VIEW_WITH_DISTANCE) {
             foreach ($areas as $key => $value) {
-                $areas[$key] = $key . ' ' . $value['distance'] . ', kms';
+                $areas[$key] = $value['address'] . ' ' . $value['distance'] . ', kms';
             }
         }
 

@@ -44,6 +44,13 @@ CONFIGURATION
 
 Then you need specify the actual database access for your server in the file `config/db.php` or `config/db-local.php`
 
+### Migration
+
+Then you need to create a database for this project and fill it with migrations. You will need to go to the project directory and execute the command:
+```
+php yii migrate
+```
+
 ### Verifying the installation
 
 After the done actions you need only to configure the web server and go to url
