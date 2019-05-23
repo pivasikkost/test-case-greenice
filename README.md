@@ -41,7 +41,7 @@ CONFIGURATION
 -------------
 ### Params
 
-For Google maps to work correctly, specify your Google maps js api key in config/params-local.php like in config/params.php
+For Google maps to work correctly, specify your Google maps js api key in `config/params-local.php` like in `config/params.php`
 
 ### Database
 
